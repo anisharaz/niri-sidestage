@@ -134,3 +134,25 @@ pub fn focus(id: u64) {
 pub fn focus_workspace(id: u64) {
     action(Action::FocusWorkspace { reference: WorkspaceReferenceArg::Id(id) });
 }
+
+pub fn close(id: u64) {
+    action(Action::CloseWindow { id: Some(id) });
+}
+
+/// Move a window to a workspace without following it there.
+pub fn move_window(id: u64, workspace: u64) {
+    action(Action::MoveWindowToWorkspace {
+        window_id: Some(id),
+        reference: WorkspaceReferenceArg::Id(workspace),
+        focus: false,
+    });
+}
+
+/// Name of the monitor that has focus right now.
+pub fn focused_output() -> Option<String> {
+    let mut s = Socket::connect().ok()?;
+    match s.send(Request::FocusedOutput).ok()? {
+        Ok(niri_ipc::Response::FocusedOutput(Some(o))) => Some(o.name),
+        _ => None,
+    }
+}

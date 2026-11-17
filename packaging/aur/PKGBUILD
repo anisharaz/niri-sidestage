@@ -1,0 +1,40 @@
+# Maintainer: Anish Araz <anisharaz919@gmail.com>
+pkgname=niri-sidestage
+pkgver=0.2.0
+pkgrel=1
+pkgdesc='Slide-out side strip for niri that switches windows and workspaces per monitor'
+arch=(x86_64)
+url='https://github.com/anisharaz/niri-sidestage'
+license=(MIT)
+depends=(gcc-libs glibc gtk4 gtk4-layer-shell)
+makedepends=(cargo)
+options=('!debug')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+# Run `updpkgsums` once the v$pkgver tag exists.
+sha256sums=('SKIP')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --frozen --release
+}
+
+check() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo test --frozen --release
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  install -Dm755 "target/release/$pkgname" -t "$pkgdir/usr/bin/"
+  install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname/"
+  install -Dm644 README.md -t "$pkgdir/usr/share/doc/$pkgname/"
+}

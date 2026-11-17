@@ -1,0 +1,58 @@
+name: Release
+
+# Push a tag like v0.2.0 (matching the version in Cargo.toml) to publish a release with the
+# binary, its checksum and the install script.
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: pacman -Syu --noconfirm --needed base-devel git rust gtk4 gtk4-layer-shell
+      - uses: actions/checkout@v4
+      - name: Tag must match Cargo.toml
+        run: |
+          want="${GITHUB_REF_NAME#v}"
+          have="$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)"
+          if [ "$want" != "$have" ]; then
+            echo "tag $GITHUB_REF_NAME does not match Cargo.toml version $have" >&2
+            exit 1
+          fi
+      - name: Build
+        run: cargo build --release --locked
+      - name: Test
+        run: cargo test --release --locked
+      - name: Stage binary
+        run: |
+          mkdir dist
+          install -m755 target/release/niri-sidestage dist/niri-sidestage-x86_64-linux
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binary
+          path: dist/niri-sidestage-x86_64-linux
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binary
+          path: dist
+      - name: Checksum
+        run: cd dist && sha256sum niri-sidestage-x86_64-linux > SHA256SUMS
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/niri-sidestage-x86_64-linux dist/SHA256SUMS install.sh \
+            --title "$GITHUB_REF_NAME" --generate-notes

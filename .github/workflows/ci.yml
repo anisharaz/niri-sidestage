@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # niri-sidestage needs a recent gtk4-layer-shell, so build on Arch.
+    container: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: pacman -Syu --noconfirm --needed base-devel git rust gtk4 gtk4-layer-shell
+      - uses: actions/checkout@v4
+      - name: Build
+        run: cargo build --release --locked
+      - name: Test
+        run: cargo test --locked
+      - name: Clippy
+        run: cargo clippy --locked -- -D warnings
