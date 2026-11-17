@@ -31,7 +31,23 @@ Windows now stay exactly where niri put them and the strip is purely a switcher.
 - GTK 4 and [gtk4-layer-shell](https://github.com/wmww/gtk4-layer-shell) system libraries.
   On Arch: `sudo pacman -S gtk4 gtk4-layer-shell`.
 
-## Build and install
+## Install from a release
+
+Prebuilt x86_64 Linux binaries are on the
+[releases page](https://github.com/anisharaz/niri-sidestage/releases). The install script downloads
+the latest one, verifies its SHA-256 checksum, and puts it in `~/.local/bin`:
+
+```sh
+curl -fsSL https://github.com/anisharaz/niri-sidestage/releases/latest/download/install.sh | sh
+```
+
+You still need the GTK 4 and gtk4-layer-shell libraries installed (see Requirements); the script
+warns if any are missing. The binary needs glibc 2.34 or newer. Set `NIRI_SIDESTAGE_VERSION=v0.1.0`
+to pin a version or `PREFIX=/some/dir` to change where it installs, and run
+`sh install.sh uninstall` to remove it. If you would rather read the script first, it is
+[`install.sh`](install.sh) in this repo.
+
+## Build from source
 
 ```sh
 git clone git@github.com:anisharaz/niri-sidestage.git
@@ -39,6 +55,8 @@ cd niri-sidestage
 cargo build --release
 install -Dm755 target/release/niri-sidestage ~/.local/bin/niri-sidestage
 ```
+
+## Start with niri
 
 Start it with niri by adding this to your niri config:
 
