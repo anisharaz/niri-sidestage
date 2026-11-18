@@ -1,11 +1,12 @@
 #!/bin/sh
-# Install niri-sidestage from a GitHub release.
+# Install niri-sidestage (and a default config, if you have none) from a GitHub release.
 #
 #   curl -fsSL https://github.com/anisharaz/niri-sidestage/releases/latest/download/install.sh | sh
 #
 # Environment:
-#   NIRI_SIDESTAGE_VERSION  release tag to install, e.g. v0.1.0 (default: latest)
+#   NIRI_SIDESTAGE_VERSION  release tag to install, e.g. v0.3.0 (default: latest)
 #   PREFIX                  install prefix (default: ~/.local, binary goes to $PREFIX/bin)
+#   XDG_CONFIG_HOME         where the default config goes (default: ~/.config)
 #
 # Usage:  install.sh [install|uninstall]
 set -eu
@@ -69,6 +70,18 @@ say "verifying checksum..."
 mkdir -p "$PREFIX/bin"
 install -m 755 "$TMP/$ASSET" "$DEST"
 say "installed $DEST"
+
+# A default config for this user, unless one exists already. Older releases do not ship one.
+CONF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/niri-sidestage"
+CONF="$CONF_DIR/config.toml"
+if [ -e "$CONF" ]; then
+    say "kept your existing $CONF"
+elif fetch "$BASE/config.toml" "$TMP/config.toml" 2>/dev/null \
+    && (cd "$TMP" && grep " config.toml\$" SHA256SUMS | sha256sum -c - >/dev/null 2>&1); then
+    mkdir -p "$CONF_DIR"
+    install -m 644 "$TMP/config.toml" "$CONF"
+    say "installed default config $CONF"
+fi
 
 # The binary links against GTK 4 and gtk4-layer-shell, which are not bundled.
 if command -v ldd >/dev/null 2>&1; then

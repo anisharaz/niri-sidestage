@@ -1,6 +1,6 @@
 [package]
 name = "niri-sidestage"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 description = "A slide-out side strip for niri that switches windows and workspaces per monitor"
 license = "MIT"

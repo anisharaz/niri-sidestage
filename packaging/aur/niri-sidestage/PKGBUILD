@@ -1,12 +1,14 @@
 # Maintainer: Anish Araz <anisharaz919@gmail.com>
 pkgname=niri-sidestage
-pkgver=0.2.0
+pkgver=0.3.0
 pkgrel=1
 pkgdesc='Slide-out side strip for niri that switches windows and workspaces per monitor'
 arch=(x86_64)
 url='https://github.com/anisharaz/niri-sidestage'
 license=(MIT)
 depends=(gcc-libs glibc gtk4 gtk4-layer-shell)
+conflicts=(niri-sidestage-bin)
+backup=(etc/xdg/niri-sidestage/config.toml)
 makedepends=(cargo)
 options=('!debug')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
@@ -35,6 +37,7 @@ check() {
 package() {
   cd "$pkgname-$pkgver"
   install -Dm755 "target/release/$pkgname" -t "$pkgdir/usr/bin/"
+  install -Dm644 config/config.toml -t "$pkgdir/etc/xdg/niri-sidestage/"
   install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname/"
   install -Dm644 README.md -t "$pkgdir/usr/share/doc/$pkgname/"
 }

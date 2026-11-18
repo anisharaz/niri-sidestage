@@ -26,11 +26,15 @@ You need niri **26.04** and the GTK 4 libraries. On Arch:
 sudo pacman -S gtk4 gtk4-layer-shell
 ```
 
-**1. Install.** This downloads the latest release, checks its SHA-256 checksum and puts it in `~/.local/bin`:
+**1. Install.** This downloads the latest release, checks its SHA-256 checksums and puts the binary
+in `~/.local/bin`. It also drops a documented default config at
+`~/.config/niri-sidestage/config.toml` if you do not have one yet (it never overwrites yours):
 
 ```sh
 curl -fsSL https://github.com/anisharaz/niri-sidestage/releases/latest/download/install.sh | sh
 ```
+
+On Arch you can use a package instead, see [Other ways to install](#other-ways-to-install).
 
 **2. Try it now.**
 
@@ -88,9 +92,18 @@ and exits.
 
 ## Configuration
 
-Optional. Put a file at `~/.config/niri-sidestage/config.toml` (or under `$XDG_CONFIG_HOME`): a
-flat list of `key = value` lines, where `#` starts a comment. Restart niri-sidestage after
-editing it. These are the defaults:
+Optional. The settings live in `~/.config/niri-sidestage/config.toml` (or under
+`$XDG_CONFIG_HOME`): a flat list of `key = value` lines, where `#` starts a comment. Restart
+niri-sidestage after editing it. Settings are layered, each key overriding the one before:
+
+1. the built-in defaults
+2. a system-wide file, `/etc/xdg/niri-sidestage/config.toml` (or under `$XDG_CONFIG_DIRS`), which
+   the Arch packages install
+3. your own file in `~/.config`, where you only need the keys you want to change
+4. the `NIRI_SIDESTAGE_GAP` environment variable
+
+The shipped default file, [`config/config.toml`](config/config.toml), contains exactly the
+built-in defaults:
 
 ```toml
 side = "left"          # "left" or "right"
@@ -115,15 +128,21 @@ Environment variables:
 ## Other ways to install
 
 **Pin a version or change the location.** The install script reads `NIRI_SIDESTAGE_VERSION`
-(for example `v0.2.0`) and `PREFIX` (default `~/.local`). Run `sh install.sh uninstall` to remove
-it. To read the script first, it is [`install.sh`](install.sh) in this repo. The prebuilt binary is
+(for example `v0.3.0`) and `PREFIX` (default `~/.local`). Run `sh install.sh uninstall` to remove
+the binary (your config stays). To read the script first, it is [`install.sh`](install.sh) in this repo. The prebuilt binary is
 x86_64 Linux and needs glibc 2.34 or newer.
 
-**Arch Linux.** A `PKGBUILD` is in [`packaging/aur/`](packaging/aur). It builds from the tagged
-source tarball:
+**Arch Linux.** Two `PKGBUILD`s are in [`packaging/aur/`](packaging/aur). They are not published
+on the AUR yet, so build them from this repo. Both install the binary, the default config in
+`/etc/xdg/niri-sidestage/` (pacman keeps your edits on upgrade) and the license, and they conflict
+with each other.
 
 ```sh
-cd packaging/aur && makepkg -si
+# prebuilt: installs the binary, config and license straight from the GitHub release
+cd packaging/aur/niri-sidestage-bin && makepkg -si
+
+# or build from source
+cd packaging/aur/niri-sidestage && makepkg -si
 ```
 
 **From source.** Needs a Rust toolchain (edition 2024) and the libraries from the quick start:

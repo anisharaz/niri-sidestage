@@ -1,0 +1,31 @@
+# Maintainer: Anish Araz <anisharaz919@gmail.com>
+#
+# Installs the prebuilt binary, default config and license from the GitHub release
+# (built by .github/workflows/release.yml). No compiler needed.
+pkgname=niri-sidestage-bin
+_pkgname=niri-sidestage
+pkgver=0.3.0
+pkgrel=1
+pkgdesc='Slide-out side strip for niri that switches windows and workspaces per monitor (prebuilt binary)'
+arch=(x86_64)
+url='https://github.com/anisharaz/niri-sidestage'
+license=(MIT)
+depends=(gcc-libs glibc gtk4 gtk4-layer-shell)
+provides=("$_pkgname=$pkgver")
+conflicts=("$_pkgname")
+# The default config lives in /etc/xdg; pacman keeps your edits on upgrade. Per-user overrides
+# go in ~/.config/niri-sidestage/config.toml and win over this file, key by key.
+backup=(etc/xdg/niri-sidestage/config.toml)
+options=(!debug !strip)
+_rel="$url/releases/download/v$pkgver"
+source=("$_pkgname-$pkgver::$_rel/niri-sidestage-x86_64-linux"
+        "$_pkgname-$pkgver-config.toml::$_rel/config.toml"
+        "$_pkgname-$pkgver-LICENSE::$_rel/LICENSE")
+# Fill with `updpkgsums` once the v$pkgver release exists (they match the release's SHA256SUMS).
+sha256sums=('SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -Dm755 "$srcdir/$_pkgname-$pkgver" "$pkgdir/usr/bin/$_pkgname"
+  install -Dm644 "$srcdir/$_pkgname-$pkgver-config.toml" "$pkgdir/etc/xdg/niri-sidestage/config.toml"
+  install -Dm644 "$srcdir/$_pkgname-$pkgver-LICENSE" "$pkgdir/usr/share/licenses/$_pkgname/LICENSE"
+}

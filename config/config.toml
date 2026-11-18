@@ -1,0 +1,25 @@
+# niri-sidestage configuration.
+#
+# This file holds the built-in defaults, so leaving it alone changes nothing.
+# Copy it to ~/.config/niri-sidestage/config.toml to change settings for your user: keys there
+# override this file, and keys you leave out keep their values from here.
+# Restart niri-sidestage after editing.
+
+# Which screen edge the strip lives on: "left" or "right".
+side = "left"
+
+# Width in pixels of the invisible edge trigger. It sits in niri's outer gap so it never covers a
+# window. "auto" reads `gaps` from your niri config; or set a number (1 or more).
+gap = "auto"
+
+# Width of the open strip in pixels (100 to 600).
+panel_width = 152
+
+# How long after the pointer leaves before the strip slides away, in milliseconds.
+hide_delay_ms = 250
+
+# Slide animation time in milliseconds.
+slide_ms = 170
+
+# The edge trigger is as tall as the strip, but never shorter than this many pixels.
+min_trigger = 200
