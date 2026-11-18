@@ -1,128 +1,108 @@
+<div align="center">
+
 # niri-sidestage
 
-A slide-out side strip for [niri](https://github.com/YaLTeR/niri) that lists the windows on your
-current workspace, and shows a per-monitor breakdown of every workspace and its windows. Touch the
-edge of a monitor and it slides out; click a window to jump to it.
+**A slide-out window and workspace switcher for [niri](https://github.com/YaLTeR/niri).**<br>
+Touch the edge of a monitor, pick a window, get on with your day.
 
-It started as an attempt to copy macOS Stage Manager. That version hid windows on parked
-workspaces, which fought with niri's layout (widths, focus, workspace switching), so it was dropped.
-Windows now stay exactly where niri put them and the strip is purely a switcher.
+[![CI](https://github.com/anisharaz/niri-sidestage/actions/workflows/ci.yml/badge.svg)](https://github.com/anisharaz/niri-sidestage/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/anisharaz/niri-sidestage)](https://github.com/anisharaz/niri-sidestage/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Features
+<img src="docs/demo.gif" alt="niri-sidestage sliding out and switching between windows" width="800">
 
-- **Per monitor.** Each monitor gets its own strip showing only its own windows and workspaces.
-- **Edge trigger, no reserved space.** A transparent strip sits in niri's outer gap, so it never
-  covers a window. The panel opens the moment the pointer touches the edge level with it, and closes
-  shortly after the pointer leaves or after you pick something. Windows are never resized by the
-  strip.
-- **Window list.** The windows on the workspace shown on that monitor, in layout order (column, then
-  row; floating windows last). The focused window is highlighted and urgent ones get an accent.
-  Focusing a window never reorders the list, only moving it does. Long lists scroll.
-- **Workspace breakdown.** The "Workspaces" button switches the panel to that monitor's workspaces,
-  each with its windows as icons. Click a window to focus it (niri switches workspace if needed), or
-  click a heading to switch to that workspace. Empty workspaces are hidden unless active.
-- **Drag to move.** In the breakdown, drag a window's icon onto another workspace to move it there.
-- **Middle-click to close** a window from its tile or icon. Hover for the full title.
-- **Keyboard control.** `niri-sidestage toggle` opens the panel on the focused monitor and gives it
-  the keyboard: arrows or Tab to move, Enter to pick, Escape to dismiss.
-- **Left or right edge,** and the gap is detected from your niri config.
-- **Hides when pointless.** A monitor with a single window in total shows no strip.
-- Icons come from your installed desktop entries.
+</div>
 
-## Requirements
+- **Always one touch away.** Move the pointer to the screen edge and a strip of your windows slides out. Click one to jump to it.
+- **Per monitor.** Every monitor gets its own strip with only its own windows and workspaces.
+- **Out of the way.** It reserves no screen space and never resizes your windows.
+- **Keyboard friendly.** Bind one key to open it, then use the arrows and Enter.
 
-- niri **26.04**. The IPC crate is pinned to the matching `niri-ipc 26.4`; a different niri version
-  may speak a different IPC protocol.
-- GTK 4 and [gtk4-layer-shell](https://github.com/wmww/gtk4-layer-shell) 1.3 or newer.
-  On Arch: `sudo pacman -S gtk4 gtk4-layer-shell`.
-- To build from source, a Rust toolchain (edition 2024).
+## Quick start
 
-## Install
+You need niri **26.04** and the GTK 4 libraries. On Arch:
 
-### From a release
+```sh
+sudo pacman -S gtk4 gtk4-layer-shell
+```
 
-Prebuilt x86_64 Linux binaries are on the
-[releases page](https://github.com/anisharaz/niri-sidestage/releases). The install script downloads
-the latest one, verifies its SHA-256 checksum, and puts it in `~/.local/bin`:
+**1. Install.** This downloads the latest release, checks its SHA-256 checksum and puts it in `~/.local/bin`:
 
 ```sh
 curl -fsSL https://github.com/anisharaz/niri-sidestage/releases/latest/download/install.sh | sh
 ```
 
-You still need the GTK 4 and gtk4-layer-shell libraries installed (see Requirements); the script
-warns if any are missing. The binary needs glibc 2.34 or newer. Set `NIRI_SIDESTAGE_VERSION=v0.2.0` to pin a version or `PREFIX=/some/dir` to change where it
-installs, and run `sh install.sh uninstall` to remove it. If you would rather read the script
-first, it is [`install.sh`](install.sh) in this repo.
-
-### Arch Linux
-
-A `PKGBUILD` is in [`packaging/aur/`](packaging/aur). It builds from the tagged source tarball:
+**2. Try it now.**
 
 ```sh
-cd packaging/aur && makepkg -si
+niri-sidestage &
 ```
 
-### From source
+Move the pointer to the left edge of a monitor, level with where the blue marker sits.
 
-```sh
-git clone git@github.com:anisharaz/niri-sidestage.git
-cd niri-sidestage
-cargo build --release
-install -Dm755 target/release/niri-sidestage ~/.local/bin/niri-sidestage
-```
-
-## Start with niri
-
-Add this to your niri config. Use the full path if `~/.local/bin` is not on niri's `PATH`:
+**3. Start it with niri.** Add this to `~/.config/niri/config.kdl`. Use the full path
+(`/home/you/.local/bin/niri-sidestage`) if `~/.local/bin` is not on niri's `PATH`:
 
 ```kdl
 spawn-at-startup "niri-sidestage"
 ```
 
-To open it from the keyboard, bind the control command:
+**4. Optional: a key to open it.** Add inside your `binds { }` block:
 
 ```kdl
-binds {
-    Mod+Tab { spawn "niri-sidestage" "toggle"; }
-}
+Mod+Tab { spawn "niri-sidestage" "toggle"; }
 ```
 
-## Usage
+That is all. Everything below is reference.
+
+## Using it
+
+| Do this | To get this |
+|---|---|
+| Touch the screen edge, level with the strip | The strip slides out. It closes shortly after the pointer leaves. |
+| Click a window | Focus it. niri scrolls it into view. |
+| **Workspaces** button | Switch to that monitor's workspaces, each with its windows as icons. |
+| Click a workspace heading | Switch to that workspace. |
+| Drag an icon onto another workspace | Move the window there. |
+| Middle-click a window | Close it. |
+| Hover a window | See its full title. |
+| `niri-sidestage toggle` | Open the strip on the focused monitor and give it the keyboard: arrows or Tab to move, Enter to pick, Escape to dismiss. |
+
+A monitor with only one window in total shows no strip. The list follows niri's layout (column,
+then row, floating windows last); focusing a window never reorders it, only moving one does.
+
+### Commands
 
 ```
-niri-sidestage                 run the strip (auto-hides, slides out when the pointer touches the edge)
+niri-sidestage                 run the strip
 niri-sidestage --pinned        run the strip and keep it open
-niri-sidestage toggle          open the panel on the focused monitor, or dismiss it
+niri-sidestage toggle          open the strip on the focused monitor, or dismiss it
 niri-sidestage open | close    the same, one direction only
 niri-sidestage toggle --output eDP-1    target a specific monitor
 niri-sidestage --version
 ```
 
-Move the pointer to the edge of a monitor, level with the panel. The thin blue marker in the
-middle of the edge shows the trigger zone: it is as tall as the panel (at least 200px), so the rest
-of the edge, including the corners, does nothing.
-
-A panel opened with `toggle` or `open` stays open and holds the keyboard until you pick something,
-press Escape, or toggle it again. Only one copy can run at a time; starting a second prints a
-message and exits.
+A strip opened with `toggle` or `open` stays open and holds the keyboard until you pick something,
+press Escape, or toggle it again. Only one copy runs at a time; starting a second prints a message
+and exits.
 
 ## Configuration
 
-An optional file at `~/.config/niri-sidestage/config.toml` (or under `$XDG_CONFIG_HOME`). It is a
-flat list of `key = value` lines; `#` starts a comment. Everything is optional:
+Optional. Put a file at `~/.config/niri-sidestage/config.toml` (or under `$XDG_CONFIG_HOME`): a
+flat list of `key = value` lines, where `#` starts a comment. Restart niri-sidestage after
+editing it. These are the defaults:
 
 ```toml
 side = "left"          # "left" or "right"
 gap = "auto"           # px width of the edge trigger; "auto" reads `gaps` from your niri config
 panel_width = 152      # 100 to 600
-hide_delay_ms = 250    # how long after the pointer leaves before the panel slides away
+hide_delay_ms = 250    # how long after the pointer leaves before the strip slides away
 slide_ms = 170         # slide animation time
-min_trigger = 200      # the trigger zone is as tall as the panel, but at least this tall
+min_trigger = 200      # the trigger zone is as tall as the strip, but at least this tall
 ```
 
-The gap should equal niri's `gaps` so the trigger stays inside the gap and never covers a window.
-With `gap = "auto"` (the default) it follows your niri config, including `include`d files, and falls
-back to 5 if it finds nothing. Restart niri-sidestage after editing the file.
+The edge trigger lives in niri's outer gap, so it never covers a window. With `gap = "auto"` it
+follows the `gaps` value in your niri config (including `include`d files) and falls back to 5.
 
 Environment variables:
 
@@ -132,6 +112,29 @@ Environment variables:
 | `NIRI_SIDESTAGE_DEBUG` | Print pointer enter/leave/motion events to stderr. |
 | `NIRI_SIDESTAGE_START_WS` | Start in the workspace breakdown view. |
 
+## Other ways to install
+
+**Pin a version or change the location.** The install script reads `NIRI_SIDESTAGE_VERSION`
+(for example `v0.2.0`) and `PREFIX` (default `~/.local`). Run `sh install.sh uninstall` to remove
+it. To read the script first, it is [`install.sh`](install.sh) in this repo. The prebuilt binary is
+x86_64 Linux and needs glibc 2.34 or newer.
+
+**Arch Linux.** A `PKGBUILD` is in [`packaging/aur/`](packaging/aur). It builds from the tagged
+source tarball:
+
+```sh
+cd packaging/aur && makepkg -si
+```
+
+**From source.** Needs a Rust toolchain (edition 2024) and the libraries from the quick start:
+
+```sh
+git clone git@github.com:anisharaz/niri-sidestage.git
+cd niri-sidestage
+cargo build --release
+install -Dm755 target/release/niri-sidestage ~/.local/bin/niri-sidestage
+```
+
 ## How it works
 
 One process, no daemon.
@@ -140,19 +143,23 @@ One process, no daemon.
   output. Clicks send `FocusWindow`, `FocusWorkspace`, `CloseWindow` or `MoveWindowToWorkspace`
   actions back over the IPC socket.
 - Per monitor there is one full-height layer-shell window anchored to the chosen edge. An input
-  region keeps only the trigger zone interactive while closed, and the zone plus the visible panel
+  region keeps only the trigger zone interactive while closed, and the zone plus the visible strip
   while open. Because it is a single surface, the pointer never hands off between windows, which
   avoids flicker from enter/leave races.
-- The panel's window has a fixed size. Opening and closing slides the content inside it, driven by
-  the frame clock. Resizing a layer-shell window on every frame lags behind the compositor and tears.
+- The window has a fixed size. Opening and closing slides the content inside it, driven by the
+  frame clock. Resizing a layer-shell window on every frame lags behind the compositor and tears.
 - `toggle`, `open` and `close` talk to the running strip over a Unix socket at
-  `$XDG_RUNTIME_DIR/niri-sidestage.sock`. While opened that way the panel takes exclusive keyboard
+  `$XDG_RUNTIME_DIR/niri-sidestage.sock`. While opened that way the strip takes exclusive keyboard
   focus, and releases it when dismissed.
+
+It started as an attempt to copy macOS Stage Manager. That version hid windows on parked
+workspaces, which fought with niri's layout (widths, focus, workspace switching), so it was dropped.
+Windows now stay exactly where niri put them and the strip is purely a switcher.
 
 ## Limitations
 
-- The open panel covers roughly the leftmost (or rightmost) 160px of the window beneath it. It
-  reserves no space on purpose, so it cannot avoid that.
+- The open strip covers roughly the 160px of the window beneath it at the screen edge. It reserves
+  no space on purpose, so it cannot avoid that.
 - No window thumbnails, only app icons and titles.
 - You can only drop a window onto a workspace that is shown in the breakdown, so not onto an empty
   one.
