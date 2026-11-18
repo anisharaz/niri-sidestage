@@ -1,0 +1,24 @@
+pkgbase = niri-sidestage-bin
+	pkgdesc = Slide-out side strip for niri that switches windows and workspaces per monitor (prebuilt binary)
+	pkgver = 0.3.0
+	pkgrel = 1
+	url = https://github.com/anisharaz/niri-sidestage
+	arch = x86_64
+	license = MIT
+	depends = gcc-libs
+	depends = glibc
+	depends = gtk4
+	depends = gtk4-layer-shell
+	provides = niri-sidestage=0.3.0
+	conflicts = niri-sidestage
+	options = !debug
+	options = !strip
+	backup = etc/xdg/niri-sidestage/config.toml
+	source = niri-sidestage-0.3.0::https://github.com/anisharaz/niri-sidestage/releases/download/v0.3.0/niri-sidestage-x86_64-linux
+	source = niri-sidestage-0.3.0-config.toml::https://github.com/anisharaz/niri-sidestage/releases/download/v0.3.0/config.toml
+	source = niri-sidestage-0.3.0-LICENSE::https://github.com/anisharaz/niri-sidestage/releases/download/v0.3.0/LICENSE
+	sha256sums = 3fd05173beecf9581c79e9dd3db9f91c539be1b689b79a29cefd19fc83ab42be
+	sha256sums = 4ce194864291ea30ff9fea9cc3d1f4ce5b698470b77cb91f69a50aa6220d3d90
+	sha256sums = 8da8c8ea64c5303522675ac0bdd0a8ed76f58c41559e68158332bd08870c2d99
+
+pkgname = niri-sidestage-bin
