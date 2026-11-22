@@ -234,9 +234,9 @@ impl Panel {
         if !self.pinned {
             self.close();
         }
-        if self.ws_mode.get() {
-            self.ws_mode.set(false);
-            // Swap the content back once the panel has slid away (immediately when pinned).
+        if self.ws_mode.get() != start_ws() {
+            self.ws_mode.set(start_ws());
+            // Swap the content back to the default view once the panel has slid away (immediately when pinned).
             let me = self.clone();
             let delay = if self.pinned { 0 } else { cfg().slide_ms as u64 + 60 };
             glib::timeout_add_local_once(Duration::from_millis(delay), move || me.rebuild());
@@ -568,7 +568,7 @@ fn make_panel(app: &gtk::Application, mon: &gtk::gdk::Monitor, pinned: bool) -> 
         target: Cell::new(if pinned { 1.0 } else { 0.0 }),
         tick: RefCell::new(None),
         pinned,
-        ws_mode: Cell::new(std::env::var_os("NIRI_SIDESTAGE_START_WS").is_some()),
+        ws_mode: Cell::new(start_ws()),
         drawn_ws_mode: Cell::new(false),
         win_height: Cell::new(0),
         mon_h: mon.geometry().height(),
@@ -711,6 +711,11 @@ fn middle_click_closes(btn: &gtk::Button, id: u64) {
         niri::close(id);
     });
     btn.add_controller(click);
+}
+
+/// Does the strip open in the workspace breakdown? (`view` in the config, or the env override.)
+fn start_ws() -> bool {
+    std::env::var_os("NIRI_SIDESTAGE_START_WS").is_some() || cfg().view == crate::config::View::Workspaces
 }
 
 /// One workspace in the breakdown: a heading that switches to it, and its windows as icons.

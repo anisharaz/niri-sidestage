@@ -14,8 +14,16 @@ pub enum Side {
     Right,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum View {
+    Windows,
+    Workspaces,
+}
+
 #[derive(Clone, Debug)]
 pub struct Config {
+    /// Which view the strip opens in.
+    pub view: View,
     pub side: Side,
     /// Width in px of the invisible edge trigger; should equal niri's `gaps`.
     pub gap: i32,
@@ -29,6 +37,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
+            view: View::Windows,
             side: Side::Left,
             gap: 5,
             panel_width: 152,
@@ -107,6 +116,11 @@ fn apply_file(path: &Path, cfg: &mut Config, gap_set: &mut bool) {
                 "left" => cfg.side = Side::Left,
                 "right" => cfg.side = Side::Right,
                 _ => bad("expected \"left\" or \"right\""),
+            },
+            "view" => match val {
+                "windows" => cfg.view = View::Windows,
+                "workspaces" => cfg.view = View::Workspaces,
+                _ => bad("expected \"windows\" or \"workspaces\""),
             },
             "gap" => match val {
                 "auto" => {
@@ -255,6 +269,19 @@ mod tests {
     }
 
     #[test]
+    fn view_option() {
+        let d = tmp("view");
+        let f = d.join("c.toml");
+        fs::write(&f, "view = \"workspaces\"\n").unwrap();
+        let (mut cfg, mut gap_set) = (Config::default(), false);
+        apply_file(&f, &mut cfg, &mut gap_set);
+        assert_eq!(cfg.view, View::Workspaces);
+        fs::write(&f, "view = \"grid\"\n").unwrap();
+        apply_file(&f, &mut cfg, &mut gap_set);
+        assert_eq!(cfg.view, View::Workspaces);
+    }
+
+    #[test]
     fn bad_values_are_ignored() {
         let d = tmp("bad");
         let f = d.join("c.toml");
@@ -271,8 +298,8 @@ mod tests {
         apply_file(&f, &mut cfg, &mut gap_set);
         let d = Config::default();
         assert_eq!(
-            (cfg.side, cfg.gap, cfg.panel_width, cfg.hide_delay, cfg.slide_ms, cfg.min_trigger, gap_set),
-            (d.side, d.gap, d.panel_width, d.hide_delay, d.slide_ms, d.min_trigger, false)
+            (cfg.view, cfg.side, cfg.gap, cfg.panel_width, cfg.hide_delay, cfg.slide_ms, cfg.min_trigger, gap_set),
+            (d.view, d.side, d.gap, d.panel_width, d.hide_delay, d.slide_ms, d.min_trigger, false)
         );
     }
 }

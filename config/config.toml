@@ -5,6 +5,10 @@
 # override this file, and keys you leave out keep their values from here.
 # Restart niri-sidestage after editing.
 
+# Which view the strip opens in: "windows" (this workspace's windows) or "workspaces" (every
+# workspace on the monitor, with its windows). The button at the top switches to the other one.
+view = "windows"
+
 # Which screen edge the strip lives on: "left" or "right".
 side = "left"
 
