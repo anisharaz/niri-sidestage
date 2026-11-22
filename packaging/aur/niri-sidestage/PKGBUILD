@@ -1,6 +1,6 @@
 # Maintainer: Anish Araz <anisharaz919@gmail.com>
 pkgname=niri-sidestage
-pkgver=0.4.0
+pkgver=0.4.1
 pkgrel=1
 pkgdesc='Slide-out side strip for niri that switches windows and workspaces per monitor'
 arch=(x86_64)

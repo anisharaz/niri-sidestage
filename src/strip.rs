@@ -201,7 +201,10 @@ impl Panel {
                 glib::idle_add_local_once(move || me2.rebuild());
             });
         }
-        self.content.append(&toggle);
+        // With `view = "workspaces"` the workspace view is the only view, so there is no button.
+        if cfg().view != crate::config::View::Workspaces {
+            self.content.append(&toggle);
+        }
 
         let list = gtk::Box::new(gtk::Orientation::Vertical, 10);
         if ws_mode {

@@ -1,6 +1,6 @@
 pkgbase = niri-sidestage
 	pkgdesc = Slide-out side strip for niri that switches windows and workspaces per monitor
-	pkgver = 0.4.0
+	pkgver = 0.4.1
 	pkgrel = 1
 	url = https://github.com/anisharaz/niri-sidestage
 	arch = x86_64
@@ -13,7 +13,7 @@ pkgbase = niri-sidestage
 	conflicts = niri-sidestage-bin
 	options = !debug
 	backup = etc/xdg/niri-sidestage/config.toml
-	source = niri-sidestage-0.4.0.tar.gz::https://github.com/anisharaz/niri-sidestage/archive/refs/tags/v0.4.0.tar.gz
+	source = niri-sidestage-0.4.1.tar.gz::https://github.com/anisharaz/niri-sidestage/archive/refs/tags/v0.4.1.tar.gz
 	sha256sums = SKIP
 
 pkgname = niri-sidestage

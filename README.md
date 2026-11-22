@@ -65,7 +65,7 @@ That is all. Everything below is reference.
 |---|---|
 | Touch the screen edge, level with the strip | The strip slides out. It closes shortly after the pointer leaves. |
 | Click a window | Focus it. niri scrolls it into view. |
-| **Workspaces** / **Windows** button | Switch between the window list and the workspace view (each workspace with its windows as icons). Set `view = "workspaces"` to open in the workspace view. |
+| **Workspaces** / **Windows** button | Switch between the window list and the workspace view (each workspace with its windows as icons). Set `view = "workspaces"` to always open in the workspace view; the button is then hidden. |
 | Click a workspace heading | Switch to that workspace. |
 | Drag an icon onto another workspace | Move the window there. |
 | Middle-click a window | Close it. |
@@ -106,7 +106,7 @@ The shipped default file, [`config/config.toml`](config/config.toml), contains e
 built-in defaults:
 
 ```toml
-view = "windows"       # "windows" or "workspaces": which view the strip opens in
+view = "windows"       # "windows" or "workspaces": which view the strip opens in (workspaces hides the switch button)
 side = "left"          # "left" or "right"
 gap = "auto"           # px width of the edge trigger; "auto" reads `gaps` from your niri config
 panel_width = 152      # 100 to 600

@@ -6,7 +6,8 @@
 # Restart niri-sidestage after editing.
 
 # Which view the strip opens in: "windows" (this workspace's windows) or "workspaces" (every
-# workspace on the monitor, with its windows). The button at the top switches to the other one.
+# workspace on the monitor, with its windows). With "windows" a button at the top switches to the
+# workspace view; with "workspaces" there is no button and the workspace view is the only view.
 view = "windows"
 
 # Which screen edge the strip lives on: "left" or "right".

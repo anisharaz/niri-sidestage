@@ -4,7 +4,7 @@
 # (built by .github/workflows/release.yml). No compiler needed.
 pkgname=niri-sidestage-bin
 _pkgname=niri-sidestage
-pkgver=0.4.0
+pkgver=0.4.1
 pkgrel=1
 pkgdesc='Slide-out side strip for niri that switches windows and workspaces per monitor (prebuilt binary)'
 arch=(x86_64)
