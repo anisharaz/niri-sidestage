@@ -22,8 +22,8 @@ source=("$_pkgname-$pkgver::$_rel/niri-sidestage-x86_64-linux"
         "$_pkgname-$pkgver-config.toml::$_rel/config.toml"
         "$_pkgname-$pkgver-LICENSE::$_rel/LICENSE")
 # These match the release's SHA256SUMS. After bumping pkgver, run `updpkgsums`.
-sha256sums=('3fd05173beecf9581c79e9dd3db9f91c539be1b689b79a29cefd19fc83ab42be'
-            '4ce194864291ea30ff9fea9cc3d1f4ce5b698470b77cb91f69a50aa6220d3d90'
+sha256sums=('e5824f6a521ac8b0936e92fa6d54e396ac7c16541fe5b605934810d4942c3c6e'
+            'fede89c3fa6c56aba7c32e3253ebc8aa08656c11f8ef3e078c3ac4a156b5c4b8'
             '8da8c8ea64c5303522675ac0bdd0a8ed76f58c41559e68158332bd08870c2d99')
 
 package() {

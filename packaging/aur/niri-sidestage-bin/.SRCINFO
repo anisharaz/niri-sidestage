@@ -1,6 +1,6 @@
 pkgbase = niri-sidestage-bin
 	pkgdesc = Slide-out side strip for niri that switches windows and workspaces per monitor (prebuilt binary)
-	pkgver = 0.3.0
+	pkgver = 0.4.1
 	pkgrel = 1
 	url = https://github.com/anisharaz/niri-sidestage
 	arch = x86_64
@@ -9,16 +9,16 @@ pkgbase = niri-sidestage-bin
 	depends = glibc
 	depends = gtk4
 	depends = gtk4-layer-shell
-	provides = niri-sidestage=0.3.0
+	provides = niri-sidestage=0.4.1
 	conflicts = niri-sidestage
 	options = !debug
 	options = !strip
 	backup = etc/xdg/niri-sidestage/config.toml
-	source = niri-sidestage-0.3.0::https://github.com/anisharaz/niri-sidestage/releases/download/v0.3.0/niri-sidestage-x86_64-linux
-	source = niri-sidestage-0.3.0-config.toml::https://github.com/anisharaz/niri-sidestage/releases/download/v0.3.0/config.toml
-	source = niri-sidestage-0.3.0-LICENSE::https://github.com/anisharaz/niri-sidestage/releases/download/v0.3.0/LICENSE
-	sha256sums = 3fd05173beecf9581c79e9dd3db9f91c539be1b689b79a29cefd19fc83ab42be
-	sha256sums = 4ce194864291ea30ff9fea9cc3d1f4ce5b698470b77cb91f69a50aa6220d3d90
+	source = niri-sidestage-0.4.1::https://github.com/anisharaz/niri-sidestage/releases/download/v0.4.1/niri-sidestage-x86_64-linux
+	source = niri-sidestage-0.4.1-config.toml::https://github.com/anisharaz/niri-sidestage/releases/download/v0.4.1/config.toml
+	source = niri-sidestage-0.4.1-LICENSE::https://github.com/anisharaz/niri-sidestage/releases/download/v0.4.1/LICENSE
+	sha256sums = e5824f6a521ac8b0936e92fa6d54e396ac7c16541fe5b605934810d4942c3c6e
+	sha256sums = fede89c3fa6c56aba7c32e3253ebc8aa08656c11f8ef3e078c3ac4a156b5c4b8
 	sha256sums = 8da8c8ea64c5303522675ac0bdd0a8ed76f58c41559e68158332bd08870c2d99
 
 pkgname = niri-sidestage-bin
